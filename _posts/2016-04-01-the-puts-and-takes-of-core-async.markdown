@@ -132,6 +132,8 @@ For those who are interested, the issue and the fix is [here](http://dev.clojure
 If you use mix at all and expect to have large additions and subtractions of channel, I'd suggest applying this fix to your
 own code.
 
+It's worth noting that ```onto-chan``` is also not blocking, so using it in a ```go-loop``` can be a Bad Idea.
+
 # _There's Plenty More To Talk About_
 
 I hope this has been at least a little helpful if you work with ```core.async``` or are planning to. I'm going to talk a lot
