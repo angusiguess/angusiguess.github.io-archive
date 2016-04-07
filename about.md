@@ -4,8 +4,8 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+Goose is currently a Clojure programmer living in Fredericton, NB, Canada. He really likes riding bikes, programming, reading, and by the time you read this probably something else too.
 
-You can find the source code for the Jekyll new theme at: [github.com/jglovier/jekyll-new](https://github.com/jglovier/jekyll-new)
+His github page is [here](github.com/angusiguess)
 
-You can find the source code for Jekyll at [github.com/jekyll/jekyll](https://github.com/jekyll/jekyll)
+He's on twitter at [@angusiguess](https://twitter.com/angusiguess)
