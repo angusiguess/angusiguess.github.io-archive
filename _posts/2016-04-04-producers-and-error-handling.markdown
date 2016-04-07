@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The puts and takes of core.async, part !!: error handling for producers."
-date: 2016-04-01 22:00:00
+date: 2016-04-04 22:00:00
 ---
 
 Working with ```core.async``` over time, we start to see some idioms and patterns
