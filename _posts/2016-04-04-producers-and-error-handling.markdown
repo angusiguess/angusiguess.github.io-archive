@@ -6,7 +6,7 @@ date: 2016-04-04 22:00:00
 
 ### Update: April 7
 
-Reddit user halgari (who wrote the core.async go macros and give an *excellent* series of videos on how they work,
+Reddit user halgari (who wrote the core.async go macros and has an *excellent* series of videos on how they work,
 which can be found [here](https://www.youtube.com/watch?v=R3PZMIwXN_g)) 
 pointed out that using a ```>!!``` in a function that would be
 placed in a go-loop can lead to some nasty bugs and block the thread pool. I've
