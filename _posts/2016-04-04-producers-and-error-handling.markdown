@@ -4,6 +4,17 @@ title: "The puts and takes of core.async, part !!: error handling for producers.
 date: 2016-04-04 22:00:00
 ---
 
+### Update: April 7
+
+Reddit user halgari (who wrote the core.async go macros and give an *excellent* series of videos on how they work,
+which can be found [here](https://www.youtube.com/watch?v=R3PZMIwXN_g)) 
+pointed out that using a ```>!!``` in a function that would be
+placed in a go-loop can lead to some nasty bugs and block the thread pool. I've
+updated my code to reflect this.
+
+@priyatam on the clojurians slack pointed out some issues running the code, I've
+resolved these as well.
+
 Working with ```core.async``` over time, we start to see some idioms and patterns
 emerge. We'll start with probably the simplest one, the ```producer```. If anyone
 has a better name for this pattern I'd be happy to hear it, but for now ```producer```
