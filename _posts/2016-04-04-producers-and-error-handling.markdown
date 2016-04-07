@@ -86,7 +86,7 @@ Our fake client looks like this:
     [events]
   LogConsumer
   (take! [this offset]
-    (if (= 0 (rand-int 1000)) (throw (kafka-exception))
+    (if (= 0 (rand-int 1000)) (throw (kafka-exception offset))
         (try (nth events offset)
              (catch Exception e
                (throw (invalid-offset-exception offset)))))))
@@ -135,24 +135,20 @@ Let's pull everything that would operate in the go-loop into its own function:
 
 {% highlight clojure %}
 
+
 (defn publish-click
-  ;; The zero-arity version returns our initial state, sort of like a
-  ;; reducing function. This is so our go-loop doesn't need to know how
-  ;; to initialize state. We'll use this more in the future.
-  ([]
-   0)
   ([connection offset publish>]
    ;; Catch any errors thrown in this function.
-   (try (let [click (client/take! connection offset)]
-          (a/>!! publish> click)
-          ;; We tag any of our return values with a message type.
-          ;; For something as simple as this producer it isn't immediately useful
-          ;; But this will come in handy for more complex patterns.
-          [:read (inc offset)])
-        (catch Throwable e
-          [:error {:exception e
-                   :offset offset
-                   :operation :publish-click}]))))
+   (a/go (try (let [click (client/take! connection offset)]
+                (a/>! publish> click)
+                ;; We tag any of our return values with a message type.
+                ;; For something as simple as this producer it isn't immediately useful
+                ;; But this will come in handy for more complex patterns.
+                [:read (inc offset)])
+              (catch Throwable e
+                [:error {:exception e
+                         :offset offset
+                         :operation :publish-click}])))))
                    
 {% endhighlight %}
 
@@ -160,16 +156,19 @@ And modify our go-loop to call the function instead.
 
 {% highlight clojure %}
 
-(defn start [publish>]
-  ;; We can't close over publish> anymore, since we now need the go-loop provided by this function.
-  (let [connection (client/simple-consumer 10)]
-    (a/go-loop [offset (publish-click)]
-      ;; We use the message tag to determine if an error occurred. If it did, we return
-      ;; the message state.
-      (let [[msg-type state :as msg] (publish-click connection offset publish>)]
-        (if (= msg-type :error)
-          state
-          (recur state))))))
+(defn start
+  ([publish> offset]
+   (let [connection (client/simple-consumer 10000)]
+     (a/go-loop [offset offset]
+       ;; We use the message tag to determine if an error occurred. If it did, we return
+       ;; the message state.
+       (let [[msg-type state :as msg] (a/<! (publish-click connection offset publish>))]
+         (if (= msg-type :error)
+           state
+           (recur state))))))
+  ([publish>]
+  ;; If no argument is provided, assume we should start reading at the beginning.
+   (start publish> 0)))
 
 {% endhighlight %}
 
@@ -188,10 +187,10 @@ later but luckily our workplace is a work of fiction so I can make a point.
   (let [publish> (a/chan 1024)]
     (a/go-loop [producer (start publish>)]
       (println "Starting producer.")
-      (let [error (a/<! producer)]
+      (let [{:keys [offset] :as error} (a/<! producer)]
         (println "An error has occurred: " error)
         (println "Restarting producer.")
-        (recur (start publish>))))
+        (recur (start publish> offset))))
     publish>))
 
 {% endhighlight %}
