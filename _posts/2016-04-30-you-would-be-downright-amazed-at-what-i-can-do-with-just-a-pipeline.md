@@ -6,6 +6,10 @@ date: 2016-04-30 10:53:00
 
 The companion code to this post can be found [here](https://github.com/angusiguess/wikipedia-edit-tracker)
 
+# Updates
+
+Reddit user nefreat recommends [this post](http://elbenshira.com/blog/understanding-transducers/) for more info on transducers and comp ordering with transducers.
+
 # The struggle
 
 Initially my goal for this post was to write about error handling in pipelines.
