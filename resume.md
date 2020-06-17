@@ -33,8 +33,11 @@ __2014-2017__
 
  Here I've helped architect a new system, built a number of libraries and services
  for this system, specified and build an integration testing tool, for which I led
- a team, and currently head up our core services team. Everything I've worked on
- here was in Clojure.
+ a team, and currently head up our core services team. Of late I've been working to
+ increase our system observability and to solve difficult problems in our critical
+ services (things like memory leaks and race conditions). All of this work has been
+ done in Clojure.
+
 
 #### Introhive
 
